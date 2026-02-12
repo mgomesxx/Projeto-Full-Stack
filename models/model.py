@@ -1,0 +1,2 @@
+lista_usuarios = []
+
