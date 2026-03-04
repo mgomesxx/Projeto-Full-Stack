@@ -1,0 +1,3 @@
+[submodule "gest-stock"]
+	path = gest-stock
+	url = https://github.com/carlosrmfernandes/gest-stock.git
