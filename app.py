@@ -1,35 +1,24 @@
 from flask import Flask, request, jsonify
 from controller.app import createUser
-from service.service import getUser, deleteUser
-from models.model import lista_usuarios
+from service.service import getUser, deleteUser, lista_usuarios
 
 app = Flask(__name__)
 
 @app.route('/criar', methods=['POST'])
 def criarUsuario():
-    
-    lista_usuarios = createUser()
-
-    return "Usuario foi cadastrado!"
-
+    return jsonify(createUser())
 
 @app.route('/listar')
 def listarUsuarios():
+    return jsonify(lista_usuarios)
 
-    return lista_usuarios
-
-
-@app.route('/listar/<int:cpf>')
+@app.route('/listar/<cpf>')
 def listarUsuario(cpf):
+    return jsonify(getUser(cpf))
 
-    usuario = getUser(cpf)
-
-    return usuario
-
-
-@app.route('/deletar/<int:cpf>', methods=['DELETE'])
+@app.route('/deletar/<cpf>', methods=['DELETE'])
 def deletarUsuario(cpf):
+    return jsonify(deleteUser(cpf))
 
-    usuario = deleteUser(cpf)
-
-    return usuario
+if __name__ == '__main__':
+    app.run(debug=True)
