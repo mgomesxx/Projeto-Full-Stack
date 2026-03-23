@@ -1,22 +1,48 @@
-from models.model import lista_usuarios
+import random
+from models.model import lista_usuarios, lista_codigos
+from service.auth_service import gerar_codigo, enviar_whatsapp, gerar_token
 
-def usuario(dados_usuario):
-    for campo in ["nome", "email", "senha", "cpf"]:
-        if not dados_usuario.get(campo):
+def usuario(dados):
+    for campo in ["nome", "cnpj", "email", "celular", "senha"]:
+        if not dados.get(campo):
             return {"erro": f"{campo} é obrigatório"}
-    if any(u["cpf"] == dados_usuario["cpf"] for u in lista_usuarios):
-        return {"erro": "CPF já cadastrado"}
-    lista_usuarios.append(dados_usuario)
-    return {"mensagem": "Usuário criado!", "usuario": dados_usuario}
+    if any(u["cnpj"] == dados["cnpj"] for u in lista_usuarios):
+        return {"erro": "CNPJ já cadastrado"}
 
-def getUser(cpf):
-    for user in lista_usuarios:
-        if user["cpf"] == cpf:
-            return user
-    return {"erro": "Usuário não encontrado"}
+    dados["status"] = "Inativo"
+    lista_usuarios.append(dados)
 
-def deleteUser(cpf):
-    user = getUser(cpf)
+    codigo = gerar_codigo()
+    lista_codigos.append({"cnpj": dados["cnpj"], "codigo": codigo})
+    enviar_whatsapp(dados["celular"], codigo)
+
+    return {"mensagem": "Cadastro realizado! Verifique seu WhatsApp para ativar a conta."}
+
+def ativar_conta(cnpj, codigo):
+    registro = next((c for c in lista_codigos if c["cnpj"] == cnpj), None)
+    if not registro or registro["codigo"] != codigo:
+        return {"erro": "Código inválido"}
+    
+    user = next((u for u in lista_usuarios if u["cnpj"] == cnpj), None)
+    user["status"] = "Ativo"
+    lista_codigos.remove(registro)
+    return {"mensagem": "Conta ativada com sucesso!"}
+
+def login(email, senha):
+    user = next((u for u in lista_usuarios if u["email"] == email), None)
+    if not user or user["senha"] != senha:
+        return {"erro": "Email ou senha inválidos"}
+    if user["status"] != "Ativo":
+        return {"erro": "Conta não ativada"}
+    token = gerar_token(email)
+    return {"token": token}
+
+def getUser(cnpj):
+    user = next((u for u in lista_usuarios if u["cnpj"] == cnpj), None)
+    return user or {"erro": "Usuário não encontrado"}
+
+def deleteUser(cnpj):
+    user = getUser(cnpj)
     if "erro" in user:
         return user
     lista_usuarios.remove(user)
