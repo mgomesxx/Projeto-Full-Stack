@@ -1,4 +1,4 @@
-# Projeto Full Stack — API de Cadastro de Vendedores
+# Projeto Full Stack — API gestão de estoque para mini mercado
 
 API REST desenvolvida em Python com Flask para gerenciamento de mini mercados (vendedores), com autenticação via JWT e ativação de conta por WhatsApp usando Twilio.
 
