@@ -1,12 +1,15 @@
 import jwt
 import random
+import os
 from datetime import datetime, timedelta
 from twilio.rest import Client
+from dotenv import load_dotenv
 
-SECRET_KEY = "123456789"
+load_dotenv()
 
-TWILIO_SID = "ACbfe4c81746a0345b5029c1b9f8e122f7"
-TWILIO_TOKEN = "85dcc3b9079de75dc671337766c56b7c"
+SECRET_KEY = os.getenv("SECRET_KEY")
+TWILIO_SID = os.getenv("TWILIO_SID")
+TWILIO_TOKEN = os.getenv("TWILIO_TOKEN")
 TWILIO_WHATSAPP = "whatsapp:+14155238886"
 
 def gerar_codigo():
