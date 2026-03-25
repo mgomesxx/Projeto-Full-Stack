@@ -47,3 +47,17 @@ def deleteUser(cnpj):
         return user
     lista_usuarios.remove(user)
     return {"mensagem": "Usuário deletado!"}
+
+def editarUser(cnpj, dados):
+    user = getUser(cnpj)
+    if "erro" in user:
+        return user
+    if "nome" in dados:
+        user["nome"] = dados["nome"]
+    if "email" in dados:
+        user["email"] = dados["email"]
+    if "senha" in dados:
+        user["senha"] = dados["senha"]
+    if "celular" in dados:
+        user["celular"] = dados["celular"]
+    return {"mensagem": "Usuário atualizado!", "usuario": user}

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from controller.app import createUser
 from controller.auth import ativarConta, loginVendedor
 from service.service import getUser, deleteUser, lista_usuarios
+from controller.auth import ativarConta, loginVendedor, editarVendedor
 
 app = Flask(__name__)
 
@@ -25,9 +26,15 @@ def listarUsuarios():
 def listarUsuario(cnpj):
     return jsonify(getUser(cnpj))
 
+@app.route('/editar/<cnpj>', methods=['PUT'])
+def editarUsuario(cnpj):
+    return jsonify(editarVendedor(cnpj))
+
 @app.route('/deletar/<cnpj>', methods=['DELETE'])
 def deletarUsuario(cnpj):
     return jsonify(deleteUser(cnpj))
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    
