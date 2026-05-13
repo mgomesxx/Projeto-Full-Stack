@@ -3,36 +3,93 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Produtos</title>
+  <title>Meu Mercadinho</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 1.5rem; }
-    .header { background: #170d6e; color: #fff; padding: 1rem 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
-    .header h2 { margin: 0; font-size: 1.2rem; }
+    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 0; }
+
+    .header {
+      background: #170d6e;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .header .logo { font-size: 1.4rem; font-weight: bold; }
+    .header .logo span { font-size: 1.6rem; }
+
     .header-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
     .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
-    .btn-white { background: #fff; color: #170d6e; font-weight: bold; }
+    .btn-white { background: #fff; color: #170d6e font-weight: bold; }
     .btn-white:hover { background: #f0eeff; }
     .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; }
     .btn-outline:hover { background: rgba(255,255,255,0.1); }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    thead { background: #170d6e; color: #fff; }
-    th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
-    tr:not(:last-child) td { border-bottom: 1px solid #eee; }
-    tr:hover td { background: #f5f3ff; }
-    .badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+
+    .conteudo { padding: 1.5rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: #f0eeff;
+    }
+
+    .card .sem-foto {
+      width: 100%;
+      height: 160px;
+      background: #ede9f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .card-info { padding: 0.8rem; flex: 1; }
+
+    .card-info .nome { font-weight: bold; font-size: 1rem; color: #333; margin-bottom: 0.3rem; }
+    .card-info .preco { color: #170d6e; font-size: 1.1rem; font-weight: bold; margin-bottom: 0.3rem; }
+    .card-info .estoque { font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; }
+
+    .badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: inline-block; margin-bottom: 0.5rem; }
     .badge.ativo { background: #d4edda; color: #155724; }
     .badge.inativo { background: #f8d7da; color: #721c24; }
-    .btn-acao { padding: 0.3rem 0.7rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-right: 0.3rem; }
+
+    .card-acoes { display: flex; gap: 0.4rem; flex-wrap: wrap; padding: 0.8rem; border-top: 1px solid #eee; }
+
+    .btn-acao { padding: 0.3rem 0.7rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; flex: 1; }
     .btn-editar { background: #170d6e; color: #fff; }
     .btn-inativar { background: #e74c3c; color: #fff; }
+    .btn-ativar { background: #27ae60; color: #fff; }
+
+    .vazio { text-align: center; padding: 3rem; color: #888; font-size: 1rem; grid-column: 1/-1; }
+
     .msg { padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
     .msg.error { background: #f8d7da; color: #721c24; display: block; }
-    .vazio { text-align: center; padding: 2rem; color: #888; }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h2>Meus Produtos</h2>
+    <div class="logo"><span>🛒</span> Meu Mercadinho</div>
     <div class="header-btns">
       <button class="btn btn-white" onclick="window.location.href='/pagina/cadastro_produto'">+ Novo Produto</button>
       <button class="btn btn-outline" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
@@ -41,14 +98,10 @@
     </div>
   </div>
 
-  <div id="msg" class="msg"></div>
-
-  <table>
-    <thead>
-      <tr><th>Nome</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr>
-    </thead>
-    <tbody id="tabela"></tbody>
-  </table>
+  <div class="conteudo">
+    <div id="msg" class="msg"></div>
+    <div class="grid" id="grid"></div>
+  </div>
 
   <script>
     const token = localStorage.getItem('token');
@@ -61,23 +114,37 @@
           headers: { 'Authorization': token }
         });
         const data = await res.json();
+
         if (data.erro) { msg.textContent = data.erro; msg.className = 'msg error'; return; }
-        const tabela = document.getElementById('tabela');
+
+        const grid = document.getElementById('grid');
+
         if (data.length === 0) {
-          tabela.innerHTML = '<tr><td colspan="5" class="vazio">Nenhum produto cadastrado.</td></tr>';
+          grid.innerHTML = '<div class="vazio">Nenhum produto cadastrado. Clique em "+ Novo Produto" para começar!</div>';
           return;
         }
-        tabela.innerHTML = data.map(p => `
-          <tr>
-            <td>${p.nome}</td>
-            <td>R$ ${parseFloat(p.preco).toFixed(2)}</td>
-            <td>${p.quantidade}</td>
-            <td><span class="badge ${p.status === 'Ativo' ? 'ativo' : 'inativo'}">${p.status}</span></td>
-            <td>
+
+        grid.innerHTML = data.map(p => `
+          <div class="card">
+            ${p.imagem
+              ? `<img src="http://127.0.0.1:5000/static/imagens/${p.imagem}" alt="${p.nome}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                 <div class="sem-foto" style="display:none">🛍️</div>`
+              : `<div class="sem-foto">🛍️</div>`
+            }
+            <div class="card-info">
+              <div class="nome">${p.nome}</div>
+              <div class="preco">R$ ${parseFloat(p.preco).toFixed(2)}</div>
+              <div class="estoque">Estoque: ${p.quantidade} un.</div>
+              <span class="badge ${p.status === 'Ativo' ? 'ativo' : 'inativo'}">${p.status}</span>
+            </div>
+            <div class="card-acoes">
               <button class="btn-acao btn-editar" onclick="editar('${p.id}')">Editar</button>
-              ${p.status === 'Ativo' ? `<button class="btn-acao btn-inativar" onclick="inativar('${p.id}')">Inativar</button>` : ''}
-            </td>
-          </tr>
+              ${p.status === 'Ativo'
+                ? `<button class="btn-acao btn-inativar" onclick="inativar('${p.id}')">Inativar</button>`
+                : `<button class="btn-acao btn-ativar" onclick="ativar('${p.id}')">Ativar</button>`
+              }
+            </div>
+          </div>
         `).join('');
       } catch (e) {
         msg.textContent = 'Erro ao carregar produtos.';
@@ -90,8 +157,15 @@
     async function inativar(id) {
       if (!confirm('Deseja inativar este produto?')) return;
       await fetch('http://127.0.0.1:5000/produtos/' + id + '/inativar', {
-        method: 'PUT',
-        headers: { 'Authorization': token }
+        method: 'PUT', headers: { 'Authorization': token }
+      });
+      carregarProdutos();
+    }
+
+    async function ativar(id) {
+      if (!confirm('Deseja ativar este produto?')) return;
+      await fetch('http://127.0.0.1:5000/produtos/' + id + '/ativar', {
+        method: 'PUT', headers: { 'Authorization': token }
       });
       carregarProdutos();
     }

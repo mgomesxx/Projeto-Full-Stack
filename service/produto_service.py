@@ -73,5 +73,13 @@ def dashboard(cnpj_seller):
     return {
         "quantidade_produtos_estoque": sum(p["quantidade"] for p in produtos),
         "valor_total_vendido": sum(v["total"] for v in vendas),
-        "total_vendas": len(vendas)
+        "total_vendas": len(vendas),
+        "vendas": vendas 
     }
+
+def ativar_produto(produto_id, cnpj_seller):
+    p = buscar_produto(produto_id, cnpj_seller)
+    if "erro" in p:
+        return p
+    p["status"] = "Ativo"
+    return {"mensagem": "Produto ativado!"}

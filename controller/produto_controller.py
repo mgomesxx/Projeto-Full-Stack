@@ -2,7 +2,7 @@ from flask import request
 from service.auth_service import verificar_token
 from service.produto_service import (
     cadastrar_produto, listar_produtos, buscar_produto,
-    editar_produto, inativar_produto, registrar_venda, dashboard
+    editar_produto, inativar_produto, registrar_venda, dashboard, ativar_produto
 )
 
 def get_cnpj_do_token():
@@ -42,6 +42,12 @@ def editarProduto(produto_id):
     if erro:
         return erro
     return editar_produto(produto_id, cnpj, request.get_json())
+
+def ativarProduto(produto_id):
+    cnpj, erro = get_cnpj_do_token()
+    if erro:
+        return erro
+    return ativar_produto(produto_id, cnpj)
 
 def inativarProduto(produto_id):
     cnpj, erro = get_cnpj_do_token()
