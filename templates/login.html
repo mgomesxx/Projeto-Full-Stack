@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #ede9f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .form-box { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    .form-box h2 { background: #170d6e; color: #fff; margin: -2rem -2rem 1.5rem -2rem; padding: 1.2rem 2rem; border-radius: 8px 8px 0 0; text-align: center; font-size: 1.2rem; }
+    label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; color: #555; }
+    input { width: 100%; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; }
+    input:focus { outline: none; border-color: #170d6e; }
+    button { width: 100%; padding: 0.7rem; background: #170d6e; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #170d6e; }
+    .msg { margin-top: 1rem; padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; display: none; }
+    .msg.success { background: #d4edda; color: #155724; display: block; }
+    .msg.error { background: #f8d7da; color: #721c24; display: block; }
+    .link { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #555; }
+    .link a { color: #170d6e; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Login</h2>
+    <label>E-mail</label>
+    <input type="email" id="email" placeholder="seu@email.com"/>
+    <label>Senha</label>
+    <input type="password" id="senha" placeholder="••••••••"/>
+    <button onclick="login()">Entrar</button>
+    <div id="msg" class="msg"></div>
+    <p class="link">Não tem conta? <a href="/pagina/cadastro">Cadastrar</a></p>
+  </div>
+  <script>
+    async function login() {
+      const msg = document.getElementById('msg');
+      msg.className = 'msg';
+      const dados = {
+        email: document.getElementById('email').value,
+        senha: document.getElementById('senha').value
+      };
+      try {
+        const res = await fetch('http://127.0.0.1:5000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        });
+        const data = await res.json();
+        if (data.erro) {
+          msg.textContent = data.erro;
+          msg.className = 'msg error';
+        } else {
+          localStorage.setItem('token', data.token);
+          msg.textContent = 'Login realizado com sucesso!';
+          msg.className = 'msg success';
+          setTimeout(() => window.location.href = '/pagina/produtos', 2000);
+        }
+      } catch (e) {
+        msg.textContent = 'Erro ao conectar com o servidor.';
+        msg.className = 'msg error';
+      }
+    }
+  </script>
+</body>
+</html>

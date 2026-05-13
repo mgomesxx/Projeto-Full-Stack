@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 1.5rem; }
+    .header { background: #170d6e; color: #fff; padding: 1rem 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .header h2 { margin: 0; font-size: 1.2rem; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; margin-left: 0.5rem; }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+    .cards { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; flex: 1; min-width: 150px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+    .card .valor { font-size: 2rem; font-weight: bold; color: #170d6e; }
+    .card .label { font-size: 0.85rem; color: #888; margin-top: 0.3rem; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    thead { background: #170d6e; color: #fff; }
+    th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
+    tr:not(:last-child) td { border-bottom: 1px solid #eee; }
+    tr:hover td { background: #f5f3ff; }
+    .section-title { font-size: 1rem; font-weight: bold; color: #170d6e; margin-bottom: 0.8rem; }
+    .vazio { text-align: center; padding: 2rem; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Dashboard</h2>
+    <div>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/produtos'">Produtos</button>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/vendas'">Vendas</button>
+      <button class="btn btn-outline" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="valor" id="total_estoque">-</div><div class="label">Itens em Estoque</div></div>
+    <div class="card"><div class="valor" id="total_vendas">-</div><div class="label">Total de Vendas</div></div>
+    <div class="card"><div class="valor" id="valor_vendido">-</div><div class="label">Valor Total Vendido</div></div>
+  </div>
+
+  <p class="section-title">Histórico de Vendas</p>
+
+  <table>
+    <thead>
+      <tr><th>Produto</th><th>Quantidade</th><th>Preço Unit.</th><th>Total</th></tr>
+    </thead>
+    <tbody id="tabela"></tbody>
+  </table>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/pagina/login';
+
+    async function carregarDashboard() {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/dashboard', { headers: { 'Authorization': token } });
+        const data = await res.json();
+        document.getElementById('total_estoque').textContent = data.quantidade_produtos_estoque;
+        document.getElementById('total_vendas').textContent = data.total_vendas;
+        document.getElementById('valor_vendido').textContent = 'R$ ' + parseFloat(data.valor_total_vendido).toFixed(2);
+        const tabela = document.getElementById('tabela');
+        if (!data.vendas || data.vendas.length === 0) {
+          tabela.innerHTML = '<tr><td colspan="4" class="vazio">Nenhuma venda registrada.</td></tr>';
+          return;
+        }
+        tabela.innerHTML = data.vendas.map(v => `
+          <tr>
+            <td>${v.nome_produto}</td>
+            <td>${v.quantidade}</td>
+            <td>R$ ${parseFloat(v.preco_unitario).toFixed(2)}</td>
+            <td>R$ ${parseFloat(v.total).toFixed(2)}</td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error('Erro:', e); }
+    }
+
+    function sair() { localStorage.removeItem('token'); window.location.href = '/pagina/login'; }
+
+    carregarDashboard();
+  </script>
+</body>
+</html>

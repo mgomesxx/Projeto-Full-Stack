@@ -5,168 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vendas</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ede9f6;
-      margin: 0;
-      padding: 1.5rem;
-    }
-
-    .header {
-      background: #5c4fce;
-      color: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
+    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 1.5rem; }
+    .header { background: #170d6e; color: #fff; padding: 1rem 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
     .header h2 { margin: 0; font-size: 1.2rem; }
-
-    .btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; margin-left: 0.5rem; }
     .btn-outline:hover { background: rgba(255,255,255,0.1); }
-
-    .form-box {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin-bottom: 2rem;
-    }
-
-    .form-box h3 {
-      margin-top: 0;
-      color: #5c4fce;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.95rem;
-      box-sizing: border-box;
-    }
-
-    select:focus, input:focus {
-      outline: none;
-      border-color: #5c4fce;
-    }
-
-    button[onclick="registrarVenda()"] {
-      width: 100%;
-      padding: 0.7rem;
-      background: #5c4fce;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    button[onclick="registrarVenda()"]:hover { background: #4a3db5; }
-
-    .msg {
-      margin-top: 1rem;
-      padding: 0.6rem;
-      border-radius: 4px;
-      text-align: center;
-      font-size: 0.9rem;
-      display: none;
-    }
-
+    .form-box { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; margin-bottom: 2rem; }
+    .form-box h3 { margin-top: 0; color: #170d6e; font-size: 1rem; margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; color: #555; }
+    select, input { width: 100%; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; }
+    select:focus, input:focus { outline: none; border-color: #170d6e; }
+    .btn-registrar { width: 100%; padding: 0.7rem; background: #170d6e; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
+    .btn-registrar:hover { background: #170d6e; }
+    .msg { margin-top: 1rem; padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; display: none; }
     .msg.success { background: #d4edda; color: #155724; display: block; }
-    .msg.error   { background: #f8d7da; color: #721c24; display: block; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    thead { background: #5c4fce; color: #fff; }
+    .msg.error { background: #f8d7da; color: #721c24; display: block; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    thead { background: #170d6e; color: #fff; }
     th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
     tr:not(:last-child) td { border-bottom: 1px solid #eee; }
     tr:hover td { background: #f5f3ff; }
-
-    .vazio {
-      text-align: center;
-      padding: 2rem;
-      color: #888;
-    }
+    .vazio { text-align: center; padding: 2rem; color: #888; }
   </style>
 </head>
 <body>
-
   <div class="header">
     <h2>Vendas</h2>
     <div>
-      <button class="btn btn-outline" onclick="window.location.href='produtos.html'">Produtos</button>
-      <button class="btn btn-outline" onclick="window.location.href='dashboard.html'" style="margin-left:0.5rem">Dashboard</button>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/produtos'">Produtos</button>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
     </div>
   </div>
 
   <div class="form-box">
     <h3>Registrar Nova Venda</h3>
-
     <label>Produto</label>
-    <select id="produto_id">
-      <option value="">Selecione um produto</option>
-    </select>
-
+    <select id="produto_id"><option value="">Selecione um produto</option></select>
     <label>Quantidade</label>
     <input type="number" id="quantidade" placeholder="0" min="1"/>
-
-    <button onclick="registrarVenda()">Registrar Venda</button>
+    <button class="btn-registrar" onclick="registrarVenda()">Registrar Venda</button>
     <div id="msg" class="msg"></div>
   </div>
 
   <table>
     <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Quantidade</th>
-        <th>Preço Unit.</th>
-        <th>Total</th>
-      </tr>
+      <tr><th>Produto</th><th>Quantidade</th><th>Preço Unit.</th><th>Total</th></tr>
     </thead>
     <tbody id="tabela"></tbody>
   </table>
 
   <script>
     const token = localStorage.getItem('token');
-    if (!token) window.location.href = 'login.html';
+    if (!token) window.location.href = '/pagina/login';
 
     async function carregarProdutos() {
-      const res = await fetch('http://127.0.0.1:5000/produtos', {
-        headers: { 'Authorization': token }
-      });
+      const res = await fetch('http://127.0.0.1:5000/produtos', { headers: { 'Authorization': token } });
       const data = await res.json();
       const select = document.getElementById('produto_id');
+      select.innerHTML = '<option value="">Selecione um produto</option>';
       data.filter(p => p.status === 'Ativo').forEach(p => {
         const opt = document.createElement('option');
         opt.value = p.id;
@@ -178,24 +75,17 @@
     async function registrarVenda() {
       const msg = document.getElementById('msg');
       msg.className = 'msg';
-
       const dados = {
         produto_id: document.getElementById('produto_id').value,
         quantidade: parseInt(document.getElementById('quantidade').value)
       };
-
       try {
         const res = await fetch('http://127.0.0.1:5000/vendas', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': token },
           body: JSON.stringify(dados)
         });
-
         const data = await res.json();
-
         if (data.erro) {
           msg.textContent = data.erro;
           msg.className = 'msg error';
@@ -214,9 +104,7 @@
     async function carregarVendas() {
       const tabela = document.getElementById('tabela');
       try {
-        const res = await fetch('http://127.0.0.1:5000/dashboard', {
-          headers: { 'Authorization': token }
-        });
+        const res = await fetch('http://127.0.0.1:5000/dashboard', { headers: { 'Authorization': token } });
         const data = await res.json();
         if (!data.vendas || data.vendas.length === 0) {
           tabela.innerHTML = '<tr><td colspan="4" class="vazio">Nenhuma venda registrada.</td></tr>';

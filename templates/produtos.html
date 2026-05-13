@@ -5,103 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Produtos</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ede9f6;
-      margin: 0;
-      padding: 1.5rem;
-    }
-
-    .header {
-      background: #5c4fce;
-      color: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
+    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 1.5rem; }
+    .header { background: #170d6e; color: #fff; padding: 1rem 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
     .header h2 { margin: 0; font-size: 1.2rem; }
-
-    .header-btns { display: flex; gap: 0.5rem; }
-
-    .btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .btn-white { background: #fff; color: #5c4fce; font-weight: bold; }
+    .header-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .btn-white { background: #fff; color: #170d6e; font-weight: bold; }
     .btn-white:hover { background: #f0eeff; }
     .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; }
     .btn-outline:hover { background: rgba(255,255,255,0.1); }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    thead { background: #5c4fce; color: #fff; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    thead { background: #170d6e; color: #fff; }
     th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
     tr:not(:last-child) td { border-bottom: 1px solid #eee; }
     tr:hover td { background: #f5f3ff; }
-
-    .badge {
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .badge.ativo   { background: #d4edda; color: #155724; }
+    .badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+    .badge.ativo { background: #d4edda; color: #155724; }
     .badge.inativo { background: #f8d7da; color: #721c24; }
-
-    .btn-acao {
-      padding: 0.3rem 0.7rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-right: 0.3rem;
-    }
-
-    .btn-editar   { background: #5c4fce; color: #fff; }
+    .btn-acao { padding: 0.3rem 0.7rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-right: 0.3rem; }
+    .btn-editar { background: #170d6e; color: #fff; }
     .btn-inativar { background: #e74c3c; color: #fff; }
-
-    .msg {
-      padding: 0.6rem;
-      border-radius: 4px;
-      text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      display: none;
-    }
-
+    .msg { padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
     .msg.error { background: #f8d7da; color: #721c24; display: block; }
-
-    .vazio {
-      text-align: center;
-      padding: 2rem;
-      color: #888;
-    }
+    .vazio { text-align: center; padding: 2rem; color: #888; }
   </style>
 </head>
 <body>
-
   <div class="header">
     <h2>Meus Produtos</h2>
     <div class="header-btns">
-      <button class="btn btn-white" onclick="window.location.href='cadastro_produto.html'">+ Novo Produto</button>
-      <button class="btn btn-outline" onclick="window.location.href='dashboard.html'">Dashboard</button>
-      <button class="btn btn-outline" onclick="window.location.href='vendas.html'">Vendas</button>
+      <button class="btn btn-white" onclick="window.location.href='/pagina/cadastro_produto'">+ Novo Produto</button>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
+      <button class="btn btn-outline" onclick="window.location.href='/pagina/vendas'">Vendas</button>
       <button class="btn btn-outline" onclick="sair()">Sair</button>
     </div>
   </div>
@@ -110,20 +45,14 @@
 
   <table>
     <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Preço</th>
-        <th>Estoque</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
+      <tr><th>Nome</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr>
     </thead>
     <tbody id="tabela"></tbody>
   </table>
 
   <script>
     const token = localStorage.getItem('token');
-    if (!token) window.location.href = 'login.html';
+    if (!token) window.location.href = '/pagina/login';
 
     async function carregarProdutos() {
       const msg = document.getElementById('msg');
@@ -132,19 +61,12 @@
           headers: { 'Authorization': token }
         });
         const data = await res.json();
-
-        if (data.erro) {
-          msg.textContent = data.erro;
-          msg.className = 'msg error';
-          return;
-        }
-
+        if (data.erro) { msg.textContent = data.erro; msg.className = 'msg error'; return; }
         const tabela = document.getElementById('tabela');
         if (data.length === 0) {
           tabela.innerHTML = '<tr><td colspan="5" class="vazio">Nenhum produto cadastrado.</td></tr>';
           return;
         }
-
         tabela.innerHTML = data.map(p => `
           <tr>
             <td>${p.nome}</td>
@@ -163,9 +85,7 @@
       }
     }
 
-    function editar(id) {
-      window.location.href = 'editar_produto.html?id=' + id;
-    }
+    function editar(id) { window.location.href = '/pagina/editar_produto?id=' + id; }
 
     async function inativar(id) {
       if (!confirm('Deseja inativar este produto?')) return;
@@ -176,10 +96,7 @@
       carregarProdutos();
     }
 
-    function sair() {
-      localStorage.removeItem('token');
-      window.location.href = 'login.html';
-    }
+    function sair() { localStorage.removeItem('token'); window.location.href = '/pagina/login'; }
 
     carregarProdutos();
   </script>
