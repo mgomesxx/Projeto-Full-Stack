@@ -4,7 +4,8 @@ from controller.auth import ativarConta, loginVendedor, editarVendedor
 from service.service import getUser, deleteUser, lista_usuarios
 from controller.produto_controller import (
     criarProduto, listarProdutos, buscarProduto,
-    editarProduto, inativarProduto, registrarVenda, verDashboard, ativarProduto
+    editarProduto, inativarProduto, registrarVenda, verDashboard,
+    ativarProduto, inativarVenda, listarVendas
 )
 from werkzeug.utils import secure_filename
 import os
@@ -82,9 +83,15 @@ def desativarProduto(produto_id):
 def reativarProduto(produto_id):
     return jsonify(ativarProduto(produto_id))
 
-@app.route('/vendas', methods=['POST'])
-def novaVenda():
-    return jsonify(registrarVenda())
+@app.route('/vendas', methods=['POST', 'GET'])
+def vendas():
+    if request.method == 'POST':
+        return jsonify(registrarVenda())
+    return jsonify(listarVendas())
+
+@app.route('/vendas/<venda_id>/inativar', methods=['PUT'])
+def desativarVenda(venda_id):
+    return jsonify(inativarVenda(venda_id))
 
 @app.route('/dashboard', methods=['GET'])
 def verRelatorio():

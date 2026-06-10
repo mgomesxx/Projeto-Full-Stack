@@ -21,17 +21,21 @@
     .msg { margin-top: 1rem; padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; display: none; }
     .msg.success { background: #d4edda; color: #155724; display: block; }
     .msg.error { background: #f8d7da; color: #721c24; display: block; }
+    .desconto-info { background: #f0eeff; border: 1px solid #170d6e; border-radius: 4px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.85rem; color: #5c4fce; display: none; }
     table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     thead { background: #170d6e; color: #fff; }
     th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
     tr:not(:last-child) td { border-bottom: 1px solid #eee; }
     tr:hover td { background: #f5f3ff; }
     .vazio { text-align: center; padding: 2rem; color: #888; }
+    .btn-inativar-venda { padding: 0.3rem 0.7rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; background: #e74c3c; color: #fff; }
+    .badge-desconto { background: #d4edda; color: #155724; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
   </style>
 </head>
 <body>
+
   <div class="header">
-    <h2>Vendas</h2>
+    <h2>🛒 Vendas</h2>
     <div>
       <button class="btn btn-outline" onclick="window.location.href='/pagina/produtos'">Produtos</button>
       <button class="btn btn-outline" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
@@ -41,16 +45,20 @@
   <div class="form-box">
     <h3>Registrar Nova Venda</h3>
     <label>Produto</label>
-    <select id="produto_id"><option value="">Selecione um produto</option></select>
+    <select id="produto_id" onchange="mostrarDesconto()">
+      <option value="">Selecione um produto</option>
+    </select>
     <label>Quantidade</label>
-    <input type="number" id="quantidade" placeholder="0" min="1"/>
+    <input type="number" id="quantidade" placeholder="0" min="1" oninput="mostrarDesconto()"/>
+    <div class="desconto-info" id="desconto_info"></div>
     <button class="btn-registrar" onclick="registrarVenda()">Registrar Venda</button>
     <div id="msg" class="msg"></div>
   </div>
 
+  <h3 style="color:#5c4fce; margin-bottom:0.8rem">Histórico de Vendas</h3>
   <table>
     <thead>
-      <tr><th>Produto</th><th>Quantidade</th><th>Preço Unit.</th><th>Total</th></tr>
+      <tr><th>Produto</th><th>Qtd</th><th>Preço Unit.</th><th>Desconto</th><th>Total</th><th>Ação</th></tr>
     </thead>
     <tbody id="tabela"></tbody>
   </table>
@@ -70,6 +78,20 @@
         opt.textContent = p.nome + ' (estoque: ' + p.quantidade + ')';
         select.appendChild(opt);
       });
+    }
+
+    function mostrarDesconto() {
+      const qtd = parseInt(document.getElementById('quantidade').value) || 0;
+      const info = document.getElementById('desconto_info');
+      if (qtd >= 10) {
+        info.textContent = '🎉 Desconto de 10% aplicado!';
+        info.style.display = 'block';
+      } else if (qtd >= 5) {
+        info.textContent = '🎉 Desconto de 5% aplicado!';
+        info.style.display = 'block';
+      } else {
+        info.style.display = 'none';
+      }
     }
 
     async function registrarVenda() {
@@ -92,6 +114,8 @@
         } else {
           msg.textContent = 'Venda registrada com sucesso!';
           msg.className = 'msg success';
+          document.getElementById('quantidade').value = '';
+          document.getElementById('desconto_info').style.display = 'none';
           carregarProdutos();
           carregarVendas();
         }
@@ -101,25 +125,37 @@
       }
     }
 
+    async function inativarVenda(id) {
+      if (!confirm('Deseja inativar esta venda? O estoque será devolvido.')) return;
+      const res = await fetch('http://127.0.0.1:5000/vendas/' + id + '/inativar', {
+        method: 'PUT',
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.mensagem) carregarVendas();
+    }
+
     async function carregarVendas() {
       const tabela = document.getElementById('tabela');
       try {
-        const res = await fetch('http://127.0.0.1:5000/dashboard', { headers: { 'Authorization': token } });
+        const res = await fetch('http://127.0.0.1:5000/vendas', { headers: { 'Authorization': token } });
         const data = await res.json();
-        if (!data.vendas || data.vendas.length === 0) {
-          tabela.innerHTML = '<tr><td colspan="4" class="vazio">Nenhuma venda registrada.</td></tr>';
+        if (!data || data.length === 0) {
+          tabela.innerHTML = '<tr><td colspan="6" class="vazio">Nenhuma venda registrada.</td></tr>';
           return;
         }
-        tabela.innerHTML = data.vendas.map(v => `
+        tabela.innerHTML = data.map(v => `
           <tr>
             <td>${v.nome_produto}</td>
             <td>${v.quantidade}</td>
             <td>R$ ${parseFloat(v.preco_unitario).toFixed(2)}</td>
+            <td>${v.desconto !== '0%' ? `<span class="badge-desconto">${v.desconto}</span>` : '-'}</td>
             <td>R$ ${parseFloat(v.total).toFixed(2)}</td>
+            <td><button class="btn-inativar-venda" onclick="inativarVenda('${v.id}')">Inativar</button></td>
           </tr>
         `).join('');
       } catch (e) {
-        tabela.innerHTML = '<tr><td colspan="4" class="vazio">Erro ao carregar vendas.</td></tr>';
+        tabela.innerHTML = '<tr><td colspan="6" class="vazio">Erro ao carregar vendas.</td></tr>';
       }
     }
 
