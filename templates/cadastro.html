@@ -3,40 +3,148 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro</title>
+  <title>Cadastro — Meu Mercadinho</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #ede9f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-    .form-box { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-    .form-box h2 { background: #170d6e; color: #fff; margin: -2rem -2rem 1.5rem -2rem; padding: 1.2rem 2rem; border-radius: 8px 8px 0 0; text-align: center; font-size: 1.2rem; }
-    label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; color: #555; }
-    input { width: 100%; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; }
-    input:focus { outline: none; border-color: #170d6e; }
-    button { width: 100%; padding: 0.7rem; background: #170d6e; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
-    button:hover { background: #170d6e; }
-    .msg { margin-top: 1rem; padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; display: none; }
-    .msg.success { background: #d4edda; color: #155724; display: block; }
-    .msg.error { background: #f8d7da; color: #721c24; display: block; }
-    .link { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #555; }
-    .link a { color: #170d6e; text-decoration: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #3b2f8f 0%, #4a2070 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #3b2f8f, #4a2070);
+      padding: 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+    .header p { font-size: 0.85rem; opacity: 0.8; margin-top: 0.3rem; }
+
+    .form { padding: 2rem; }
+
+    .field { margin-bottom: 1.2rem; }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #333;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3b2f8f;
+      box-shadow: 0 0 0 3px rgba(59,47,143,0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #3b2f8f, #4a2070);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    button:hover { opacity: 0.92; }
+    button:active { transform: scale(0.98); }
+
+    .msg {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      text-align: center;
+      display: none;
+    }
+
+    .msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
+    .msg.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
+    .footer {
+      text-align: center;
+      padding: 1.2rem 2rem;
+      border-top: 1px solid #f0f0f0;
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .footer a { color: #3b2f8f; text-decoration: none; font-weight: 600; }
+    .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="form-box">
-    <h2>Cadastro de Seller</h2>
-    <label>Nome</label>
-    <input type="text" id="nome" placeholder="Nome do mercado"/>
-    <label>CNPJ</label>
-    <input type="text" id="cnpj" placeholder="00000000000000"/>
-    <label>E-mail</label>
-    <input type="email" id="email" placeholder="seu@email.com"/>
-    <label>Celular</label>
-    <input type="text" id="celular" placeholder="11999999999"/>
-    <label>Senha</label>
-    <input type="password" id="senha" placeholder="••••••••"/>
-    <button onclick="cadastrar()">Cadastrar</button>
-    <div id="msg" class="msg"></div>
-    <p class="link">Já tem conta? <a href="/pagina/login">Entrar</a></p>
+  <div class="container">
+    <div class="header">
+      <h1>Meu Mercadinho</h1>
+      <p>Crie sua conta para começar</p>
+    </div>
+
+    <div class="form">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="nome" placeholder="Nome do mercado"/>
+      </div>
+      <div class="field">
+        <label>CNPJ</label>
+        <input type="text" id="cnpj" placeholder="00000000000000"/>
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com"/>
+      </div>
+      <div class="field">
+        <label>Celular</label>
+        <input type="text" id="celular" placeholder="11999999999"/>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="senha" placeholder="••••••••"/>
+      </div>
+
+      <button onclick="cadastrar()">Criar conta</button>
+      <div id="msg" class="msg"></div>
+    </div>
+
+    <div class="footer">
+      Já tem conta? <a href="/pagina/login">Entrar</a>
+    </div>
   </div>
+
   <script>
     async function cadastrar() {
       const msg = document.getElementById('msg');

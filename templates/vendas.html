@@ -3,65 +3,177 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vendas</title>
+  <title>Vendas — Meu Mercadinho</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #ede9f6; margin: 0; padding: 1.5rem; }
-    .header { background: #170d6e; color: #fff; padding: 1rem 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
-    .header h2 { margin: 0; font-size: 1.2rem; }
-    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
-    .btn-outline { background: transparent; color: #fff; border: 1px solid #fff; margin-left: 0.5rem; }
-    .btn-outline:hover { background: rgba(255,255,255,0.1); }
-    .form-box { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; margin-bottom: 2rem; }
-    .form-box h3 { margin-top: 0; color: #170d6e; font-size: 1rem; margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; color: #555; }
-    select, input { width: 100%; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; }
-    select:focus, input:focus { outline: none; border-color: #170d6e; }
-    .btn-registrar { width: 100%; padding: 0.7rem; background: #170d6e; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
-    .btn-registrar:hover { background: #170d6e; }
-    .msg { margin-top: 1rem; padding: 0.6rem; border-radius: 4px; text-align: center; font-size: 0.9rem; display: none; }
-    .msg.success { background: #d4edda; color: #155724; display: block; }
-    .msg.error { background: #f8d7da; color: #721c24; display: block; }
-    .desconto-info { background: #f0eeff; border: 1px solid #170d6e; border-radius: 4px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.85rem; color: #5c4fce; display: none; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    thead { background: #170d6e; color: #fff; }
-    th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
-    tr:not(:last-child) td { border-bottom: 1px solid #eee; }
-    tr:hover td { background: #f5f3ff; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; min-height: 100vh; }
+
+    .navbar {
+      background: linear-gradient(135deg, #3b2f8f, #4a2070);
+      color: #fff;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .navbar .logo { font-size: 1.1rem; font-weight: 700; }
+    .navbar-btns { display: flex; gap: 0.5rem; }
+    .btn-ghost { background: rgba(255,255,255,0.15); color: #fff; border: none; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .btn-ghost:hover { opacity: 0.85; }
+
+    .conteudo { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #3b2f8f, #4a2070);
+      padding: 1rem 1.5rem;
+      color: #fff;
+    }
+
+    .card-header h3 { font-size: 1rem; font-weight: 700; }
+    .card-header p { font-size: 0.8rem; opacity: 0.8; margin-top: 0.2rem; }
+
+    .card-body { padding: 1.5rem; }
+
+    .field { margin-bottom: 1.2rem; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #333;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #3b2f8f;
+      box-shadow: 0 0 0 3px rgba(59,47,143,0.1);
+    }
+
+    .desconto-info {
+      background: #f0eeff;
+      border: 1px solid #c5b8f5;
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      font-size: 0.85rem;
+      color: #3b2f8f;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .btn-registrar {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #3b2f8f, #4a2070);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-registrar:hover { opacity: 0.92; }
+
+    .msg {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      text-align: center;
+      display: none;
+    }
+
+    .msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
+    .msg.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f9f7ff; }
+    th { padding: 0.8rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #3b2f8f; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 0.8rem 1rem; font-size: 0.9rem; color: #333; border-bottom: 1px solid #f0f0f0; }
+    tr:hover td { background: #f9f7ff; }
+
+    .badge-desconto { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .btn-inativar-venda { padding: 0.35rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; background: #fef2f2; color: #991b1b; transition: opacity 0.2s; }
+    .btn-inativar-venda:hover { opacity: 0.8; }
+
     .vazio { text-align: center; padding: 2rem; color: #888; }
-    .btn-inativar-venda { padding: 0.3rem 0.7rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; background: #e74c3c; color: #fff; }
-    .badge-desconto { background: #d4edda; color: #155724; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h2>🛒 Vendas</h2>
-    <div>
-      <button class="btn btn-outline" onclick="window.location.href='/pagina/produtos'">Produtos</button>
-      <button class="btn btn-outline" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
+  <nav class="navbar">
+    <div class="logo">🛒 Meu Mercadinho</div>
+    <div class="navbar-btns">
+      <button class="btn-ghost" onclick="window.location.href='/pagina/produtos'">Produtos</button>
+      <button class="btn-ghost" onclick="window.location.href='/pagina/dashboard'">Dashboard</button>
+    </div>
+  </nav>
+
+  <div class="conteudo">
+    <div class="card">
+      <div class="card-header">
+        <h3>Registrar Nova Venda</h3>
+        <p>Selecione o produto e a quantidade</p>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Produto</label>
+          <select id="produto_id" onchange="mostrarDesconto()">
+            <option value="">Selecione um produto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="quantidade" placeholder="0" min="1" oninput="mostrarDesconto()"/>
+        </div>
+        <div class="desconto-info" id="desconto_info"></div>
+        <button class="btn-registrar" onclick="registrarVenda()">Registrar Venda</button>
+        <div id="msg" class="msg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Histórico de Vendas</h3>
+        <p>Apenas vendas ativas são exibidas</p>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <table>
+          <thead>
+            <tr><th>Produto</th><th>Qtd</th><th>Preço Unit.</th><th>Desconto</th><th>Total</th><th>Ação</th></tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
+      </div>
     </div>
   </div>
-
-  <div class="form-box">
-    <h3>Registrar Nova Venda</h3>
-    <label>Produto</label>
-    <select id="produto_id" onchange="mostrarDesconto()">
-      <option value="">Selecione um produto</option>
-    </select>
-    <label>Quantidade</label>
-    <input type="number" id="quantidade" placeholder="0" min="1" oninput="mostrarDesconto()"/>
-    <div class="desconto-info" id="desconto_info"></div>
-    <button class="btn-registrar" onclick="registrarVenda()">Registrar Venda</button>
-    <div id="msg" class="msg"></div>
-  </div>
-
-  <h3 style="color:#5c4fce; margin-bottom:0.8rem">Histórico de Vendas</h3>
-  <table>
-    <thead>
-      <tr><th>Produto</th><th>Qtd</th><th>Preço Unit.</th><th>Desconto</th><th>Total</th><th>Ação</th></tr>
-    </thead>
-    <tbody id="tabela"></tbody>
-  </table>
 
   <script>
     const token = localStorage.getItem('token');
@@ -84,10 +196,10 @@
       const qtd = parseInt(document.getElementById('quantidade').value) || 0;
       const info = document.getElementById('desconto_info');
       if (qtd >= 10) {
-        info.textContent = '🎉 Desconto de 10% aplicado!';
+        info.textContent = '🎉 Desconto de 10% será aplicado!';
         info.style.display = 'block';
       } else if (qtd >= 5) {
-        info.textContent = '🎉 Desconto de 5% aplicado!';
+        info.textContent = '🎉 Desconto de 5% será aplicado!';
         info.style.display = 'block';
       } else {
         info.style.display = 'none';
@@ -128,11 +240,10 @@
     async function inativarVenda(id) {
       if (!confirm('Deseja inativar esta venda? O estoque será devolvido.')) return;
       const res = await fetch('http://127.0.0.1:5000/vendas/' + id + '/inativar', {
-        method: 'PUT',
-        headers: { 'Authorization': token }
+        method: 'PUT', headers: { 'Authorization': token }
       });
       const data = await res.json();
-      if (data.mensagem) carregarVendas();
+      if (data.mensagem) { carregarVendas(); carregarProdutos(); }
     }
 
     async function carregarVendas() {
@@ -150,7 +261,7 @@
             <td>${v.quantidade}</td>
             <td>R$ ${parseFloat(v.preco_unitario).toFixed(2)}</td>
             <td>${v.desconto !== '0%' ? `<span class="badge-desconto">${v.desconto}</span>` : '-'}</td>
-            <td>R$ ${parseFloat(v.total).toFixed(2)}</td>
+            <td><strong>R$ ${parseFloat(v.total).toFixed(2)}</strong></td>
             <td><button class="btn-inativar-venda" onclick="inativarVenda('${v.id}')">Inativar</button></td>
           </tr>
         `).join('');
